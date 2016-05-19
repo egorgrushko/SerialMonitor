@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="Serial_Monitor.SerialMonitorControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             Name="SerialMonitorWindow">
+    <UserControl.Resources>
+        <Style x:Key="SettingsStackPanel" TargetType="StackPanel">
+            <Setter Property="Margin" Value="5 5 5 5"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
+        </Style>
+        <Style x:Key="SettingsLabel" TargetType="Label">
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="MaxWidth" Value="100"/>
+        </Style>
+        <Style x:Key="SettingsTextBox" TargetType="TextBox">
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="MaxWidth" Value="100"/>
+        </Style>
+        <Style x:Key="SettingsComboBox" TargetType="ComboBox">
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="MaxWidth" Value="100"/>
+        </Style>
+        <Style x:Key="SettingsToggleButton" TargetType="ToggleButton">
+            <Setter Property="MinWidth" Value="200"/>
+            <Setter Property="MaxWidth" Value="200"/>
+        </Style>
+        <Style x:Key="ControlButton" TargetType="Button">
+            <Setter Property="Margin" Value="5 0 5 10"/>
+            <Setter Property="Padding" Value="10 0 10 0"/>
+        </Style>
+        <Style x:Key="ControlToggleButton" TargetType="ToggleButton">
+            <Setter Property="Margin" Value="5 0 5 10"/>
+            <Setter Property="Padding" Value="10 0 10 0"/>
+        </Style>
+        <Style x:Key="ControlComboBox" TargetType="ComboBox">
+            <Setter Property="Margin" Value="5 0 5 10"/>
+            <Setter Property="MinWidth" Value="70"/>
+        </Style>
+    </UserControl.Resources>
+    <DockPanel LastChildFill="True">
+        <DockPanel Margin="5 0 5 10" DockPanel.Dock="Bottom" LastChildFill="True">
+            <Button Name="SendButton" Content="Send" IsEnabled="False" Margin="5 0 5 0" Padding="10 0 10 0" DockPanel.Dock="Right" Click="Send_Click"/>
+            <TextBox Name="MessageToSend" IsEnabled="False" KeyUp="MessageToSend_KeyUp" Margin="5 0 5 0"/>
+        </DockPanel>
+        <WrapPanel Orientation="Horizontal" Margin="5 0 5 0" DockPanel.Dock="Bottom">
+            <ComboBox Name="ComPorts" DropDownOpened="ComPorts_DropDownOpened" Style="{StaticResource ControlComboBox}"/>
+            <Button Name="ConnectButton" Content="Connect" Click="Connect_Click" Style="{StaticResource ControlButton}"/>
+            <Button Name="DisconnectButton" Content="Disconnect" Visibility="Collapsed" Click="Disconnect_Click" Style="{StaticResource ControlButton}"/>
+            <Button Name="ReconnectButton" Content="Reconnect" Visibility="Collapsed" Click="Reconnect_Click" Style="{StaticResource ControlButton}"/>
+            <Button Content="Clear" Click="Clear_Click" Style="{StaticResource ControlButton}"/>
+            <Button Name="SettingsOutputControl" Content="Show Settings" Click="SettingsOutputControl_Click" Style="{StaticResource ControlButton}"/>
+            <ToggleButton Name="AutoscrollCheck" IsChecked="True">
+                <ToggleButton.Style>
+                    <Style BasedOn="{StaticResource ControlToggleButton}" TargetType="{x:Type ToggleButton}">
+                        <Setter Property="Content" Value="Disable Auto Scroll"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Content" Value="Enable Auto Scroll"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+        </WrapPanel>
+        <WrapPanel Name="SettingsWindow" DockPanel.Dock="Top" Visibility="Collapsed" Orientation="Vertical" Margin="10 10 10 10">
+            <StackPanel Style="{StaticResource SettingsStackPanel}">
+                <Label Content="Baud Rate:" Style="{StaticResource SettingsLabel}"/>
+                <ComboBox Name="BaudRateComboBox" IsEditable="True" Style="{StaticResource SettingsComboBox}"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SettingsStackPanel}">
+                <Label Content="Receive new line:" Style="{StaticResource SettingsLabel}"/>
+                <ComboBox Name="ReceiveNewLineComboBox" Style="{StaticResource SettingsComboBox}"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SettingsStackPanel}">
+                <Label Content="Send new line:" Style="{StaticResource SettingsLabel}"/>
+                <ComboBox Name="SendNewLineComboBox" Style="{StaticResource SettingsComboBox}"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SettingsStackPanel}">
+                <Label Content="Data bits:" Style="{StaticResource SettingsLabel}"/>
+                <ComboBox Name="DataBitsComboBox" Style="{StaticResource SettingsComboBox}"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SettingsStackPanel}">
+                <Label Content="Encoding:" Style="{StaticResource SettingsLabel}"/>
+                <ComboBox Name="EncodingComboBox" Style="{StaticResource SettingsComboBox}"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SettingsStackPanel}">
+                <Label Content="Handshake:" Style="{StaticResource SettingsLabel}" />
+                <ComboBox Name="HandshakeComboBox" Style="{StaticResource SettingsComboBox}"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SettingsStackPanel}">
+                <Label Content="Parity:" Style="{StaticResource SettingsLabel}"/>
+                <ComboBox Name="ParityComboBox" Style="{StaticResource SettingsComboBox}"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SettingsStackPanel}">
+                <Label Content="Stop Bits:" Style="{StaticResource SettingsLabel}"/>
+                <ComboBox Name="StopBitsComboBox" Style="{StaticResource SettingsComboBox}"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SettingsStackPanel}">
+                <Label Content="Read Timeout:" Style="{StaticResource SettingsLabel}"/>
+                <TextBox Name="ReadTimeoutTextBox" Style="{StaticResource SettingsTextBox}"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SettingsStackPanel}">
+                <Label Content="Write Timeout:" Style="{StaticResource SettingsLabel}"/>
+                <TextBox Name="WriteTimeoutTextBox" Style="{StaticResource SettingsTextBox}"/>
+            </StackPanel>
+            <StackPanel Style="{StaticResource SettingsStackPanel}">
+                <ToggleButton Name="DTRToggleButton" IsChecked="True">
+                    <ToggleButton.Style>
+                        <Style BasedOn="{StaticResource SettingsToggleButton}" TargetType="{x:Type ToggleButton}">
+                            <Setter Property="Content" Value="Disable Data Terminal Ready (DTR)"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter Property="Content" Value="Enable Data Terminal Ready (DTR)"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                </ToggleButton>
+            </StackPanel>
+        </WrapPanel>
+        <RichTextBox Name="Output" Margin="0 0 0 10" AcceptsReturn="False" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" IsReadOnly="True" TextChanged="Output_TextChanged"/>
+    </DockPanel>
+</UserControl>
