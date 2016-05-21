@@ -26,24 +26,6 @@ namespace Serial_Monitor
             port.WriteTimeout = Settings.WriteTimeout;
         }
 
-        private void ReceiveByte(byte data)
-        {
-            Output.AppendText(Settings.Encoding.GetString(new byte[] { data }));
-            if (AutoscrollCheck.IsChecked == true)
-            {
-                Output.ScrollToEnd();
-            }
-        }
-
-        private void ReceiveNewLine()
-        {
-            Output.Document.ContentEnd.InsertLineBreak();
-            if (AutoscrollCheck.IsChecked == true)
-            {
-                Output.ScrollToEnd();
-            }
-        }
-
         private void PrintColorMessage(string message, SolidColorBrush brush, bool withNewLine = false)
         {
             Output.AppendText(message, brush, withNewLine);
@@ -77,32 +59,17 @@ namespace Serial_Monitor
         {
             try
             {
-                if (port.BytesToRead > 0)
-                {
-                    byte character = (byte)port.ReadByte();
-                    if (character == Settings.ReceiveNewLine[0])
-                    {
-                        for (int i = 1; i < Settings.ReceiveNewLine.Length; i++)
-                        {
-                            int newLineCharacter = port.ReadByte();
-                            if (newLineCharacter == -1)
-                            {
-                                ReceiveByte(character);
-                                return;
-                            }
-                            else if ((char)newLineCharacter != Settings.ReceiveNewLine[i])
-                            {
-                                ReceiveByte(character);
-                                ReceiveByte((byte)newLineCharacter);
-                                return;
-                            }
-                        }
+                int bytesToRead = port.BytesToRead;
 
-                        ReceiveNewLine();
-                    }
-                    else
+                if (bytesToRead > 0)
+                {
+                    byte[] buffer = new byte[bytesToRead];
+                    port.Read(buffer, 0, bytesToRead);
+
+                    Output.AppendText(Settings.Encoding.GetString(buffer).Replace(Settings.ReceiveNewLine, "\r"));
+                    if (AutoscrollCheck.IsChecked == true)
                     {
-                        ReceiveByte(character);
+                        Output.ScrollToEnd();
                     }
                 }
             }
