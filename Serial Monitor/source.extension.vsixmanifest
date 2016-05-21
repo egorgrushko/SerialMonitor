@@ -4,6 +4,7 @@
         <Identity Id="Serial_Monitor.89c666b5-b0e1-4d78-989c-788a5c1fac7a" Version="1.0" Language="en-US" Publisher="Egor Grushko" />
         <DisplayName>Serial Monitor</DisplayName>
         <Description xml:space="preserve">Serial Port Monitor for Visual Studio</Description>
+        <MoreInfo>https://github.com/egorgrushko/SerialMonitor</MoreInfo>
         <License>LICENSE.txt</License>
         <Icon>Resources\SerialMonitorIcon.png</Icon>
         <PreviewImage>Resources\SerialMonitorPreview.png</PreviewImage>
