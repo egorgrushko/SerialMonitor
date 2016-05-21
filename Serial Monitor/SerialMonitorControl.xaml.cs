@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO.Ports;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -30,24 +29,28 @@ namespace Serial_Monitor
         private void ReceiveByte(byte data)
         {
             Output.AppendText(Settings.Encoding.GetString(new byte[] { data }));
+            if (AutoscrollCheck.IsChecked == true)
+            {
+                Output.ScrollToEnd();
+            }
         }
 
         private void ReceiveNewLine()
         {
             Output.Document.ContentEnd.InsertLineBreak();
+            if (AutoscrollCheck.IsChecked == true)
+            {
+                Output.ScrollToEnd();
+            }
         }
 
         private void PrintColorMessage(string message, SolidColorBrush brush, bool withNewLine = false)
         {
-            if (withNewLine)
+            Output.AppendText(message, brush, withNewLine);
+            if (AutoscrollCheck.IsChecked == true)
             {
-                Output.Document.ContentEnd.InsertLineBreak();
+                Output.ScrollToEnd();
             }
-            TextRange text = new TextRange(Output.Document.ContentEnd.DocumentEnd, Output.Document.ContentEnd.DocumentEnd);
-            text.Text = message;
-            Output.Document.ContentEnd.InsertLineBreak();
-            text.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
-            text.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Oblique);
         }
 
         private void PrintErrorMessage(string message, bool withNewLine = false)
@@ -228,7 +231,7 @@ namespace Serial_Monitor
 
         private void Clear_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            Output.Document.Blocks.Clear();
+            Output.Clear();
         }
 
         private void Send_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -265,14 +268,6 @@ namespace Serial_Monitor
             if (selectedPort != null && ComPorts.Items.Contains(selectedPort))
             {
                 ComPorts.SelectedItem = selectedPort;
-            }
-        }
-
-        private void Output_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (AutoscrollCheck.IsChecked == true)
-            {
-                Output.ScrollToEnd();
             }
         }
 

@@ -19,6 +19,25 @@
             <Setter Property="Margin" Value="5 0 5 10"/>
             <Setter Property="MinWidth" Value="70"/>
         </Style>
+        <Style x:Key="OutputFlowDocumentScrollViewer" TargetType="FlowDocumentScrollViewer">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFA3AEB9" Offset="0"/>
+                        <GradientStop Color="#FF8399A9" Offset="0.375"/>
+                        <GradientStop Color="#FF718597" Offset="0.375"/>
+                        <GradientStop Color="#FF617584" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="OutputFlowDocument" TargetType="FlowDocument">
+            <Setter Property="Background" Value="#FFFFFFFF"/>
+            <Setter Property="Foreground" Value="#FF000000"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="11"/>
+        </Style>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <DockPanel Margin="5 0 5 10" DockPanel.Dock="Bottom" LastChildFill="True">
@@ -46,6 +65,8 @@
             </ToggleButton>
         </WrapPanel>
         <local:SerialMonitorSettingsControl x:Name="Settings" Visibility="Collapsed" Margin="10 10 10 10"/>
-        <RichTextBox Name="Output" Margin="0 0 0 10" AcceptsReturn="False" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" IsReadOnly="True" TextChanged="Output_TextChanged"/>
+        <FlowDocumentScrollViewer Name="Output" Style="{StaticResource OutputFlowDocumentScrollViewer}" Margin="0 0 0 10" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <FlowDocument Style="{StaticResource OutputFlowDocument}"/>
+        </FlowDocumentScrollViewer>
     </DockPanel>
 </UserControl>
