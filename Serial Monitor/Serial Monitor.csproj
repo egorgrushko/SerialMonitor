@@ -58,8 +58,10 @@
     <Compile Include="SerialMonitorControl.xaml.cs">
       <DependentUpon>SerialMonitorControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SerialMonitorControlSettings.cs" />
     <Compile Include="SerialMonitorPackage.cs" />
+    <Compile Include="SerialMonitorSettingsControl.xaml.cs">
+      <DependentUpon>SerialMonitorSettingsControl.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -75,6 +77,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="SerialMonitorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SerialMonitorSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

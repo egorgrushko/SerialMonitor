@@ -13,24 +13,23 @@ namespace Serial_Monitor
 {
     public partial class SerialMonitorControl : UserControl
     {
-        private SerialMonitorControlSettings settings;
         private SerialPort port;
 
         private void ConfigurePort()
         {
             port.PortName = ComPorts.SelectedItem.ToString();
-            port.BaudRate = settings.BaudRate;
-            port.DataBits = settings.DataBits;
-            port.Handshake = settings.Handshake;
-            port.Parity = settings.Parity;
-            port.StopBits = settings.StopBits;
-            port.ReadTimeout = settings.ReadTimeout;
-            port.WriteTimeout = settings.WriteTimeout;
+            port.BaudRate = Settings.BaudRate;
+            port.DataBits = Settings.DataBits;
+            port.Handshake = Settings.Handshake;
+            port.Parity = Settings.Parity;
+            port.StopBits = Settings.StopBits;
+            port.ReadTimeout = Settings.ReadTimeout;
+            port.WriteTimeout = Settings.WriteTimeout;
         }
 
         private void ReceiveByte(byte data)
         {
-            Output.AppendText(settings.Encoding.GetString(new byte[] { data }));
+            Output.AppendText(Settings.Encoding.GetString(new byte[] { data }));
         }
 
         private void ReceiveNewLine()
@@ -78,9 +77,9 @@ namespace Serial_Monitor
                 if (port.BytesToRead > 0)
                 {
                     byte character = (byte)port.ReadByte();
-                    if (character == settings.ReceiveNewLine[0])
+                    if (character == Settings.ReceiveNewLine[0])
                     {
-                        for (int i = 1; i < settings.ReceiveNewLine.Length; i++)
+                        for (int i = 1; i < Settings.ReceiveNewLine.Length; i++)
                         {
                             int newLineCharacter = port.ReadByte();
                             if (newLineCharacter == -1)
@@ -88,7 +87,7 @@ namespace Serial_Monitor
                                 ReceiveByte(character);
                                 return;
                             }
-                            else if ((char)newLineCharacter != settings.ReceiveNewLine[i])
+                            else if ((char)newLineCharacter != Settings.ReceiveNewLine[i])
                             {
                                 ReceiveByte(character);
                                 ReceiveByte((byte)newLineCharacter);
@@ -115,8 +114,6 @@ namespace Serial_Monitor
         public SerialMonitorControl()
         {
             this.InitializeComponent();
-            settings = new SerialMonitorControlSettings(this);
-            settings.Fill();
 
             port = new SerialPort();
 
@@ -133,19 +130,25 @@ namespace Serial_Monitor
 
         private void SettingsOutputControl_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (settings.IsOpen)
+            if (Settings.Visibility == Visibility.Visible)
             {
-                settings.Hide();
+                Settings.Visibility = Visibility.Collapsed;
+                Output.Visibility = Visibility.Visible;
+                SettingsOutputControl.Content = "Show Settings";
             }
-            else
+            else if (Settings.Visibility == Visibility.Collapsed)
             {
-                settings.Show();
+                Settings.Visibility = Visibility.Visible;
+                Output.Visibility = Visibility.Collapsed;
+                SettingsOutputControl.Content = "Show Output";
             }
         }
 
         private void Connect_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            settings.Hide();
+            Settings.Visibility = Visibility.Collapsed;
+            Output.Visibility = Visibility.Visible;
+            SettingsOutputControl.Content = "Show Settings";
 
             if (ComPorts.SelectedIndex != -1)
             {
@@ -157,7 +160,7 @@ namespace Serial_Monitor
                     PrintProcessMessage("Connecting...");
                     port.Open();
 
-                    if (settings.DtrEnable == true)
+                    if (Settings.DtrEnable == true)
                     {
                         port.DtrEnable = true;
                         port.DiscardInBuffer();
@@ -173,7 +176,7 @@ namespace Serial_Monitor
                     MessageToSend.IsEnabled = true;
                     SendButton.IsEnabled = true;
 
-                    settings.Lock();
+                    Settings.IsEnabled = false;
 
                     PrintSuccessMessage("Connected!");
                     portHandlerTimer.Start();
@@ -207,7 +210,7 @@ namespace Serial_Monitor
                 MessageToSend.IsEnabled = false;
                 SendButton.IsEnabled = false;
 
-                settings.Unlock();
+                Settings.IsEnabled = true;
 
                 PrintSuccessMessage("Port closed!");
             }
@@ -234,8 +237,8 @@ namespace Serial_Monitor
             {
                 byte[] data = Encoding.Convert(
                     Encoding.Default,
-                    settings.Encoding,
-                    Encoding.Default.GetBytes(MessageToSend.Text + settings.SendNewLine));
+                    Settings.Encoding,
+                    Encoding.Default.GetBytes(MessageToSend.Text + Settings.SendNewLine));
 
                 port.Write(data, 0, data.Length);
             }

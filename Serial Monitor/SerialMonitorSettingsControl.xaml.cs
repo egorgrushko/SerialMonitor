@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Text;
-using System.Windows;
+using System.Windows.Controls;
 
 namespace Serial_Monitor
 {
-    public class SerialMonitorControlSettings
+    public partial class SerialMonitorSettingsControl : UserControl
     {
         #region SettingsMapping
         public string[] BaudRateValues
@@ -213,7 +213,7 @@ namespace Serial_Monitor
             get
             {
                 int baudRate;
-                if (!int.TryParse(control.BaudRateComboBox.Text, out baudRate))
+                if (!int.TryParse(BaudRateComboBox.Text, out baudRate))
                 {
                     throw new Exception("Invalid baud rate value!");
                 }
@@ -225,7 +225,7 @@ namespace Serial_Monitor
         {
             get
             {
-                return ReceiveNewLineMap[control.ReceiveNewLineComboBox.Text];
+                return ReceiveNewLineMap[ReceiveNewLineComboBox.Text];
             }
         }
 
@@ -233,7 +233,7 @@ namespace Serial_Monitor
         {
             get
             {
-                return SendNewLineMap[control.SendNewLineComboBox.Text];
+                return SendNewLineMap[SendNewLineComboBox.Text];
             }
         }
 
@@ -241,7 +241,7 @@ namespace Serial_Monitor
         {
             get
             {
-                return StopBitsMap[control.StopBitsComboBox.Text];
+                return StopBitsMap[StopBitsComboBox.Text];
             }
         }
 
@@ -249,7 +249,7 @@ namespace Serial_Monitor
         {
             get
             {
-                return HandshakeMap[control.HandshakeComboBox.Text];
+                return HandshakeMap[HandshakeComboBox.Text];
             }
         }
 
@@ -257,7 +257,7 @@ namespace Serial_Monitor
         {
             get
             {
-                return ParityMap[control.ParityComboBox.Text];
+                return ParityMap[ParityComboBox.Text];
             }
         }
 
@@ -265,7 +265,7 @@ namespace Serial_Monitor
         {
             get
             {
-                return Convert.ToInt32(control.DataBitsComboBox.Text);
+                return Convert.ToInt32(DataBitsComboBox.Text);
             }
         }
 
@@ -274,7 +274,7 @@ namespace Serial_Monitor
             get
             {
                 int readTimeout;
-                if (!int.TryParse(control.ReadTimeoutTextBox.Text, out readTimeout))
+                if (!int.TryParse(ReadTimeoutTextBox.Text, out readTimeout))
                 {
                     throw new Exception("Invalid read timeout value!");
                 }
@@ -287,7 +287,7 @@ namespace Serial_Monitor
             get
             {
                 int writeTimeout;
-                if (!int.TryParse(control.WriteTimeoutTextBox.Text, out writeTimeout))
+                if (!int.TryParse(WriteTimeoutTextBox.Text, out writeTimeout))
                 {
                     throw new Exception("Invalid write timeout value!");
                 }
@@ -299,7 +299,7 @@ namespace Serial_Monitor
         {
             get
             {
-                return EncodingsMap[control.EncodingComboBox.Text];
+                return EncodingsMap[EncodingComboBox.Text];
             }
         }
 
@@ -307,118 +307,69 @@ namespace Serial_Monitor
         {
             get
             {
-                return control.DTRToggleButton.IsChecked.Value;
+                return DTRToggleButton.IsChecked.Value;
             }
         }
         #endregion
 
-        public bool IsOpen
+        public SerialMonitorSettingsControl()
         {
-            get
-            {
-                return control.SettingsOutputControl.Content.ToString() == "Show Output" ? true : false;
-            }
+            InitializeComponent();
+            Reset();
         }
 
-        private SerialMonitorControl control;
-
-        public SerialMonitorControlSettings(SerialMonitorControl control)
-        {
-            this.control = control;
-        }
-
-        public void Fill()
+        public void Reset()
         {
             foreach (string rate in BaudRateValues)
             {
-                control.BaudRateComboBox.Items.Add(rate);
+                BaudRateComboBox.Items.Add(rate);
             }
-            control.BaudRateComboBox.SelectedItem = DefaultBaudRate;
+            BaudRateComboBox.SelectedItem = DefaultBaudRate;
 
             foreach (string newLine in ReceiveNewLineMap.Keys)
             {
-                control.ReceiveNewLineComboBox.Items.Add(newLine);
+                ReceiveNewLineComboBox.Items.Add(newLine);
             }
-            control.ReceiveNewLineComboBox.SelectedItem = DefaultReceiveNewLine;
+            ReceiveNewLineComboBox.SelectedItem = DefaultReceiveNewLine;
 
             foreach (string newLine in SendNewLineMap.Keys)
             {
-                control.SendNewLineComboBox.Items.Add(newLine);
+                SendNewLineComboBox.Items.Add(newLine);
             }
-            control.SendNewLineComboBox.SelectedItem = DefaultSendNewLine;
+            SendNewLineComboBox.SelectedItem = DefaultSendNewLine;
 
             foreach (string dataBits in DataBitsValues)
             {
-                control.DataBitsComboBox.Items.Add(dataBits);
+                DataBitsComboBox.Items.Add(dataBits);
             }
-            control.DataBitsComboBox.SelectedItem = DefaultDataBits;
+            DataBitsComboBox.SelectedItem = DefaultDataBits;
 
             foreach (string stopBits in StopBitsMap.Keys)
             {
-                control.StopBitsComboBox.Items.Add(stopBits);
+                StopBitsComboBox.Items.Add(stopBits);
             }
-            control.StopBitsComboBox.SelectedItem = DefaultStopBits;
+            StopBitsComboBox.SelectedItem = DefaultStopBits;
 
             foreach (string encoding in EncodingsMap.Keys)
             {
-                control.EncodingComboBox.Items.Add(encoding);
+                EncodingComboBox.Items.Add(encoding);
             }
-            control.EncodingComboBox.SelectedItem = DefaultEncoding;
+            EncodingComboBox.SelectedItem = DefaultEncoding;
 
             foreach (string handshakeValue in HandshakeMap.Keys)
             {
-                control.HandshakeComboBox.Items.Add(handshakeValue);
+                HandshakeComboBox.Items.Add(handshakeValue);
             }
-            control.HandshakeComboBox.SelectedItem = DefaultHandshake;
+            HandshakeComboBox.SelectedItem = DefaultHandshake;
 
             foreach (string parityValue in ParityMap.Keys)
             {
-                control.ParityComboBox.Items.Add(parityValue);
+                ParityComboBox.Items.Add(parityValue);
             }
-            control.ParityComboBox.SelectedItem = DefaultParity;
+            ParityComboBox.SelectedItem = DefaultParity;
 
-            control.ReadTimeoutTextBox.Text = DefaultReadTimeout;
-            control.WriteTimeoutTextBox.Text = DefaultWriteTimeout;
-        }
-
-        public void Show()
-        {
-            control.Output.Visibility = Visibility.Collapsed;
-            control.SettingsWindow.Visibility = Visibility.Visible;
-            control.SettingsOutputControl.Content = "Show Output";
-        }
-
-        public void Hide()
-        {
-            control.Output.Visibility = Visibility.Visible;
-            control.SettingsWindow.Visibility = Visibility.Collapsed;
-            control.SettingsOutputControl.Content = "Show Settings";
-        }
-
-        public void Lock()
-        {
-            control.BaudRateComboBox.IsEnabled = false;
-            control.DataBitsComboBox.IsEnabled = false;
-            control.EncodingComboBox.IsEnabled = false;
-            control.HandshakeComboBox.IsEnabled = false;
-            control.ParityComboBox.IsEnabled = false;
-            control.StopBitsComboBox.IsEnabled = false;
-            control.ReadTimeoutTextBox.IsEnabled = false;
-            control.WriteTimeoutTextBox.IsEnabled = false;
-            control.DTRToggleButton.IsEnabled = false;
-        }
-
-        public void Unlock()
-        {
-            control.BaudRateComboBox.IsEnabled = true;
-            control.DataBitsComboBox.IsEnabled = true;
-            control.EncodingComboBox.IsEnabled = true;
-            control.HandshakeComboBox.IsEnabled = true;
-            control.ParityComboBox.IsEnabled = true;
-            control.StopBitsComboBox.IsEnabled = true;
-            control.ReadTimeoutTextBox.IsEnabled = true;
-            control.WriteTimeoutTextBox.IsEnabled = true;
-            control.DTRToggleButton.IsEnabled = true;
+            ReadTimeoutTextBox.Text = DefaultReadTimeout;
+            WriteTimeoutTextBox.Text = DefaultWriteTimeout;
         }
     }
 }
