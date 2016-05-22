@@ -83,6 +83,7 @@ namespace Serial_Monitor
         public SerialMonitorControl()
         {
             this.InitializeComponent();
+            Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
 
             port = new SerialPort();
 
@@ -90,13 +91,12 @@ namespace Serial_Monitor
             portHandlerTimer.Tick += SerialUpdate;
         }
 
-        public void Dispose()
+        private void Dispatcher_ShutdownStarted(object sender, EventArgs e)
         {
             portHandlerTimer.Stop();
-            port.Close();
             port.Dispose();
         }
-
+        
         private void SettingsOutputControl_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (Settings.Visibility == Visibility.Visible)
