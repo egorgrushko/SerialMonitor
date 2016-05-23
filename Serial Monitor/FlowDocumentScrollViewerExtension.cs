@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -12,23 +13,15 @@ namespace Serial_Monitor
             flowDocumentScrollViewer.Document.Blocks.Clear();
         }
 
-        public static void AppendText(this FlowDocumentScrollViewer flowDocumentScrollViewer, string data, bool withNewLine = false)
+        public static void AppendText(this FlowDocumentScrollViewer flowDocumentScrollViewer, string data)
         {
-            if (withNewLine)
-            {
-                flowDocumentScrollViewer.Document.ContentEnd.InsertLineBreak();
-            }
-            flowDocumentScrollViewer.Document.ContentEnd.InsertTextInRun(data);
+            flowDocumentScrollViewer.Document.ContentEnd.InsertTextInRun(data.Replace(Environment.NewLine, "\r"));
         }
 
-        public static void AppendText(this FlowDocumentScrollViewer flowDocumentScrollViewer, string data, SolidColorBrush brush, bool withNewLine = false)
+        public static void AppendText(this FlowDocumentScrollViewer flowDocumentScrollViewer, string data, SolidColorBrush brush)
         {
-            if (withNewLine)
-            {
-                flowDocumentScrollViewer.Document.ContentEnd.InsertLineBreak();
-            }
             TextRange range = new TextRange(flowDocumentScrollViewer.Document.ContentEnd.DocumentEnd, flowDocumentScrollViewer.Document.ContentEnd.DocumentEnd);
-            range.Text = data;
+            range.Text = data.Replace(Environment.NewLine, "\r");
             flowDocumentScrollViewer.Document.ContentEnd.InsertLineBreak();
             range.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
             range.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Oblique);

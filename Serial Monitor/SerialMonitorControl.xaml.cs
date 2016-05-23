@@ -25,33 +25,34 @@ namespace Serial_Monitor
             port.WriteTimeout = Settings.WriteTimeout;
         }
 
-        private void PrintColorMessage(string message, SolidColorBrush brush, bool withNewLine = false)
+        private void PrintColorMessage(string message, SolidColorBrush brush)
         {
-            Output.AppendText(message, brush, withNewLine);
+            Output.AppendText(message, brush);
+
             if (AutoscrollCheck.IsChecked == true)
             {
                 Output.ScrollToEnd();
             }
         }
 
-        private void PrintErrorMessage(string message, bool withNewLine = false)
+        private void PrintErrorMessage(string message)
         {
-            PrintColorMessage(message, Brushes.Red, withNewLine);
+            PrintColorMessage(message, Brushes.Red);
         }
 
-        private void PrintWarningMessage(string message, bool withNewLine = false)
+        private void PrintWarningMessage(string message)
         {
-            PrintColorMessage(message, Brushes.Yellow, withNewLine);
+            PrintColorMessage(message, Brushes.Yellow);
         }
 
-        private void PrintSuccessMessage(string message, bool withNewLine = false)
+        private void PrintSuccessMessage(string message)
         {
-            PrintColorMessage(message, Brushes.Green, withNewLine);
+            PrintColorMessage(message, Brushes.Green);
         }
 
-        private void PrintProcessMessage(string message, bool withNewLine = false)
+        private void PrintProcessMessage(string message)
         {
-            PrintColorMessage(message, Brushes.Aqua, withNewLine);
+            PrintColorMessage(message, Brushes.Aqua);
         }
 
         private void SerialUpdate(object e, EventArgs s)
@@ -65,7 +66,9 @@ namespace Serial_Monitor
                     byte[] buffer = new byte[bytesToRead];
                     port.Read(buffer, 0, bytesToRead);
 
-                    Output.AppendText(Settings.Encoding.GetString(buffer).Replace(Settings.ReceiveNewLine, "\r"));
+                    string data = Settings.Encoding.GetString(buffer);
+                    Output.AppendText(data.Replace(Settings.ReceiveNewLine, "\r"));
+
                     if (AutoscrollCheck.IsChecked == true)
                     {
                         Output.ScrollToEnd();
@@ -74,7 +77,7 @@ namespace Serial_Monitor
             }
             catch (Exception ex)
             {
-                PrintErrorMessage(ex.Message, true);
+                PrintErrorMessage(Environment.NewLine + ex.Message);
             }
         }
 
@@ -165,7 +168,7 @@ namespace Serial_Monitor
         {
             try
             {
-                PrintProcessMessage("Closing port...", true);
+                PrintProcessMessage(Environment.NewLine + "Closing port...");
 
                 portHandlerTimer.Stop();
 
