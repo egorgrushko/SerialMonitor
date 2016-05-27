@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Serial_Monitor"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="600">
     <UserControl.Resources>
         <Style x:Key="SettingsStackPanel" TargetType="StackPanel">
             <Setter Property="Margin" Value="5 5 5 5"/>
@@ -82,6 +82,24 @@
                     </Style>
                 </ToggleButton.Style>
             </ToggleButton>
+        </StackPanel>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <ToggleButton Name="RecordOutputToFileToggleButton" Checked="RecordOutputToFileToggleButton_Checked" Unchecked="RecordOutputToFileToggleButton_Checked">
+                <ToggleButton.Style>
+                    <Style BasedOn="{StaticResource SettingsToggleButton}" TargetType="{x:Type ToggleButton}">
+                        <Setter Property="Content" Value="Disable output to file"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Content" Value="Enable output to file"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+        </StackPanel>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <Label Content="Record file path:" Style="{StaticResource SettingsLabel}"/>
+            <TextBox Name="RecordFilePathTextBox" IsEnabled="False" MouseDoubleClick="RecordFilePathTextBox_MouseDoubleClick" Style="{StaticResource SettingsTextBox}"/>
         </StackPanel>
     </WrapPanel>
 </UserControl>

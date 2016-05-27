@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Threading;
@@ -32,6 +33,16 @@ namespace Serial_Monitor
             if (AutoscrollCheck.IsChecked == true)
             {
                 Output.ScrollToEnd();
+            }
+
+            if (Settings.RecordEnabled)
+            {
+                string file = Settings.RecordFile;
+
+                if (!string.IsNullOrEmpty(file) && File.Exists(file))
+                {
+                    File.AppendAllText(file, message);
+                }
             }
         }
 
@@ -72,6 +83,16 @@ namespace Serial_Monitor
                     if (AutoscrollCheck.IsChecked == true)
                     {
                         Output.ScrollToEnd();
+                    }
+
+                    if(Settings.RecordEnabled)
+                    {
+                        string file = Settings.RecordFile;
+
+                        if (!string.IsNullOrEmpty(file) && File.Exists(file))
+                        {
+                            File.AppendAllText(file, data.Replace(Settings.ReceiveNewLine, Environment.NewLine));
+                        }
                     }
                 }
             }

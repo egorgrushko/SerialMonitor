@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Text;
@@ -184,7 +185,6 @@ namespace Serial_Monitor
             }
         }
 
-
         public Dictionary<string, Encoding> EncodingsMap
         {
             get
@@ -310,6 +310,26 @@ namespace Serial_Monitor
                 return DTRToggleButton.IsChecked.Value;
             }
         }
+
+        public bool RecordEnabled
+        {
+            get
+            {
+                return RecordOutputToFileToggleButton.IsChecked.Value;
+            }
+        }
+
+        public string RecordFile
+        {
+            get
+            {
+                if (!RecordEnabled)
+                {
+                    return null;
+                }
+                return RecordFilePathTextBox.Text;
+            }
+        }
         #endregion
 
         public SerialMonitorSettingsControl()
@@ -370,6 +390,19 @@ namespace Serial_Monitor
 
             ReadTimeoutTextBox.Text = DefaultReadTimeout;
             WriteTimeoutTextBox.Text = DefaultWriteTimeout;
+        }
+
+        private void RecordOutputToFileToggleButton_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            RecordFilePathTextBox.IsEnabled = RecordOutputToFileToggleButton.IsChecked.Value;
+        }
+
+        private void RecordFilePathTextBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Multiselect = false;
+            dialog.ShowDialog();
+            RecordFilePathTextBox.Text = dialog.FileName;
         }
     }
 }
