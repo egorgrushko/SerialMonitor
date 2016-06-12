@@ -53,9 +53,8 @@ namespace Serial_Monitor
             {
                 return new Dictionary<string, string>()
                 {
-                    { "CR + NL", "\r\n" },
-                    { "CR", "\r" },
-                    { "NL", "\n" }
+                    { "CR + LF", "\r\n" },
+                    { "LF", "\n" }
                 };
             }
         }
@@ -63,7 +62,7 @@ namespace Serial_Monitor
         {
             get
             {
-                return "CR + NL";
+                return "CR + LF";
             }
         }
 
@@ -74,9 +73,8 @@ namespace Serial_Monitor
                 return new Dictionary<string, string>()
                 {
                     { "None", "" },
-                    { "CR + NL", "\r\n" },
-                    { "CR", "\r" },
-                    { "NL", "\n" }
+                    { "CR + LF", "\r\n" },
+                    { "LF", "\n" }
                 };
             }
         }
