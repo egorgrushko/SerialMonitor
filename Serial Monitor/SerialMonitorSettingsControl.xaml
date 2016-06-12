@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Serial_Monitor"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.14.0"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="600">
     <UserControl.Resources>
@@ -11,95 +12,57 @@
             <Setter Property="Margin" Value="5 5 5 5"/>
             <Setter Property="Orientation" Value="Horizontal"/>
         </Style>
-        <Style x:Key="SettingsLabel" TargetType="Label">
-            <Setter Property="MinWidth" Value="100"/>
-            <Setter Property="MaxWidth" Value="100"/>
-        </Style>
-        <Style x:Key="SettingsTextBox" TargetType="TextBox">
-            <Setter Property="MinWidth" Value="100"/>
-            <Setter Property="MaxWidth" Value="100"/>
-        </Style>
-        <Style x:Key="SettingsComboBox" TargetType="ComboBox">
-            <Setter Property="MinWidth" Value="100"/>
-            <Setter Property="MaxWidth" Value="100"/>
-        </Style>
-        <Style x:Key="SettingsToggleButton" TargetType="ToggleButton">
-            <Setter Property="MinWidth" Value="200"/>
-            <Setter Property="MaxWidth" Value="200"/>
-        </Style>
     </UserControl.Resources>
     <WrapPanel Orientation="Vertical">
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <Label Content="Baud Rate:" Style="{StaticResource SettingsLabel}"/>
-            <ComboBox Name="BaudRateComboBox" IsEditable="True" Style="{StaticResource SettingsComboBox}"/>
+            <Label Content="Baud Rate:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <ComboBox Name="BaudRateComboBox" MinWidth="100" MaxWidth="100" IsEditable="True" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <Label Content="Receive new line:" Style="{StaticResource SettingsLabel}"/>
-            <ComboBox Name="ReceiveNewLineComboBox" Style="{StaticResource SettingsComboBox}"/>
+            <Label Content="Receive new line:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <ComboBox Name="ReceiveNewLineComboBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <Label Content="Send new line:" Style="{StaticResource SettingsLabel}"/>
-            <ComboBox Name="SendNewLineComboBox" Style="{StaticResource SettingsComboBox}"/>
+            <Label Content="Send new line:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <ComboBox Name="SendNewLineComboBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <Label Content="Data bits:" Style="{StaticResource SettingsLabel}"/>
-            <ComboBox Name="DataBitsComboBox" Style="{StaticResource SettingsComboBox}"/>
+            <Label Content="Data bits:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <ComboBox Name="DataBitsComboBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <Label Content="Encoding:" Style="{StaticResource SettingsLabel}"/>
-            <ComboBox Name="EncodingComboBox" Style="{StaticResource SettingsComboBox}"/>
+            <Label Content="Encoding:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <ComboBox Name="EncodingComboBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <Label Content="Handshake:" Style="{StaticResource SettingsLabel}" />
-            <ComboBox Name="HandshakeComboBox" Style="{StaticResource SettingsComboBox}"/>
+            <Label Content="Handshake:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <ComboBox Name="HandshakeComboBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <Label Content="Parity:" Style="{StaticResource SettingsLabel}"/>
-            <ComboBox Name="ParityComboBox" Style="{StaticResource SettingsComboBox}"/>
+            <Label Content="Parity:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <ComboBox Name="ParityComboBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <Label Content="Stop Bits:" Style="{StaticResource SettingsLabel}"/>
-            <ComboBox Name="StopBitsComboBox" Style="{StaticResource SettingsComboBox}"/>
+            <Label Content="Stop Bits:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <ComboBox Name="StopBitsComboBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <Label Content="Read Timeout:" Style="{StaticResource SettingsLabel}"/>
-            <TextBox Name="ReadTimeoutTextBox" Style="{StaticResource SettingsTextBox}"/>
+            <Label Content="Read Timeout:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <TextBox Name="ReadTimeoutTextBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <Label Content="Write Timeout:" Style="{StaticResource SettingsLabel}"/>
-            <TextBox Name="WriteTimeoutTextBox" Style="{StaticResource SettingsTextBox}"/>
+            <Label Content="Write Timeout:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <TextBox Name="WriteTimeoutTextBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <ToggleButton Name="DTRToggleButton" IsChecked="True">
-                <ToggleButton.Style>
-                    <Style BasedOn="{StaticResource SettingsToggleButton}" TargetType="{x:Type ToggleButton}">
-                        <Setter Property="Content" Value="Disable Data Terminal Ready (DTR)"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsChecked" Value="False">
-                                <Setter Property="Content" Value="Enable Data Terminal Ready (DTR)"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ToggleButton.Style>
-            </ToggleButton>
+            <Button Name="DtrToggle" Content="Disable Data Terminal Ready (DTR)" MinWidth="200" MaxWidth="200" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}" Click="DtrToggle_Click"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <ToggleButton Name="RecordOutputToFileToggleButton" Checked="RecordOutputToFileToggleButton_Checked" Unchecked="RecordOutputToFileToggleButton_Checked">
-                <ToggleButton.Style>
-                    <Style BasedOn="{StaticResource SettingsToggleButton}" TargetType="{x:Type ToggleButton}">
-                        <Setter Property="Content" Value="Disable output to file"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsChecked" Value="False">
-                                <Setter Property="Content" Value="Enable output to file"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ToggleButton.Style>
-            </ToggleButton>
+            <Button Name="OutputToFileToggle" Content="Enable output to file" MinWidth="200" MaxWidth="200" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}" Click="OutputToFileToggle_Click"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
-            <Label Content="Record file path:" Style="{StaticResource SettingsLabel}"/>
-            <TextBox Name="RecordFilePathTextBox" IsEnabled="False" MouseDoubleClick="RecordFilePathTextBox_MouseDoubleClick" Style="{StaticResource SettingsTextBox}"/>
+            <Label Content="Record file path:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <TextBox Name="RecordFilePathTextBox" IsEnabled="False" MouseDoubleClick="RecordFilePathTextBox_MouseDoubleClick" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"/>
         </StackPanel>
     </WrapPanel>
 </UserControl>

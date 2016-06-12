@@ -30,12 +30,12 @@ namespace Serial_Monitor
         {
             Output.AppendText(message, brush);
 
-            if (AutoscrollCheck.IsChecked == true)
+            if (autoScrollEnabled == true)
             {
                 Output.ScrollToEnd();
             }
 
-            if (Settings.RecordEnabled)
+            if (Settings.OutputToFileEnabled)
             {
                 string file = Settings.RecordFile;
 
@@ -80,12 +80,12 @@ namespace Serial_Monitor
                     string data = Settings.Encoding.GetString(buffer);
                     Output.AppendText(data.Replace(Settings.ReceiveNewLine, "\r"));
 
-                    if (AutoscrollCheck.IsChecked == true)
+                    if (autoScrollEnabled == true)
                     {
                         Output.ScrollToEnd();
                     }
 
-                    if(Settings.RecordEnabled)
+                    if (Settings.OutputToFileEnabled)
                     {
                         string file = Settings.RecordFile;
 
@@ -103,6 +103,7 @@ namespace Serial_Monitor
         }
 
         private DispatcherTimer portHandlerTimer;
+        private bool autoScrollEnabled = true;
 
         public SerialMonitorControl()
         {
@@ -120,7 +121,7 @@ namespace Serial_Monitor
             portHandlerTimer.Stop();
             port.Dispose();
         }
-        
+
         private void SettingsOutputControl_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (Settings.Visibility == Visibility.Visible)
@@ -267,6 +268,20 @@ namespace Serial_Monitor
             {
                 Send_Click(null, null);
                 MessageToSend.Text = "";
+            }
+        }
+
+        private void AutoScrollToggle_Click(object sender, RoutedEventArgs e)
+        {
+            autoScrollEnabled = !autoScrollEnabled;
+
+            if (autoScrollEnabled)
+            {
+                AutoScrollToggle.Content = "Disable Auto Scroll";
+            }
+            else
+            {
+                AutoScrollToggle.Content = "Enable Auto Scroll";
             }
         }
     }

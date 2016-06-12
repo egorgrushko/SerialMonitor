@@ -305,25 +305,21 @@ namespace Serial_Monitor
 
         public bool DtrEnable
         {
-            get
-            {
-                return DTRToggleButton.IsChecked.Value;
-            }
+            get;
+            private set;
         }
 
-        public bool RecordEnabled
+        public bool OutputToFileEnabled
         {
-            get
-            {
-                return RecordOutputToFileToggleButton.IsChecked.Value;
-            }
+            get;
+            private set;
         }
 
         public string RecordFile
         {
             get
             {
-                if (!RecordEnabled)
+                if (!OutputToFileEnabled)
                 {
                     return null;
                 }
@@ -390,11 +386,9 @@ namespace Serial_Monitor
 
             ReadTimeoutTextBox.Text = DefaultReadTimeout;
             WriteTimeoutTextBox.Text = DefaultWriteTimeout;
-        }
 
-        private void RecordOutputToFileToggleButton_Checked(object sender, System.Windows.RoutedEventArgs e)
-        {
-            RecordFilePathTextBox.IsEnabled = RecordOutputToFileToggleButton.IsChecked.Value;
+            DtrEnable = true;
+            OutputToFileEnabled = false;
         }
 
         private void RecordFilePathTextBox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -403,6 +397,36 @@ namespace Serial_Monitor
             dialog.Multiselect = false;
             dialog.ShowDialog();
             RecordFilePathTextBox.Text = dialog.FileName;
+        }
+
+        private void DtrToggle_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DtrEnable = !DtrEnable;
+
+            if (DtrEnable)
+            {
+                DtrToggle.Content = "Disable Data Terminal Ready (DTR)";
+            }
+            else
+            {
+                DtrToggle.Content = "Enable Data Terminal Ready (DTR)";
+            }
+        }
+
+        private void OutputToFileToggle_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            OutputToFileEnabled = !OutputToFileEnabled;
+
+            if (OutputToFileEnabled)
+            {
+                OutputToFileToggle.Content = "Disable output to file";
+                RecordFilePathTextBox.IsEnabled = true;
+            }
+            else
+            {
+                OutputToFileToggle.Content = "Enable output to file";
+                RecordFilePathTextBox.IsEnabled = false;
+            }
         }
     }
 }

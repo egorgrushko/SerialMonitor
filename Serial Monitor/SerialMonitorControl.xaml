@@ -4,69 +4,26 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Serial_Monitor"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.14.0"
              mc:Ignorable="d"
              Name="SerialMonitorWindow">
-    <UserControl.Resources>
-        <Style x:Key="ControlButton" TargetType="Button">
-            <Setter Property="Margin" Value="5 0 5 10"/>
-            <Setter Property="Padding" Value="10 0 10 0"/>
-        </Style>
-        <Style x:Key="ControlToggleButton" TargetType="ToggleButton">
-            <Setter Property="Margin" Value="5 0 5 10"/>
-            <Setter Property="Padding" Value="10 0 10 0"/>
-        </Style>
-        <Style x:Key="ControlComboBox" TargetType="ComboBox">
-            <Setter Property="Margin" Value="5 0 5 10"/>
-            <Setter Property="MinWidth" Value="70"/>
-        </Style>
-        <Style x:Key="OutputFlowDocumentScrollViewer" TargetType="FlowDocumentScrollViewer">
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush">
-                <Setter.Value>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FFA3AEB9" Offset="0"/>
-                        <GradientStop Color="#FF8399A9" Offset="0.375"/>
-                        <GradientStop Color="#FF718597" Offset="0.375"/>
-                        <GradientStop Color="#FF617584" Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="OutputFlowDocument" TargetType="FlowDocument">
-            <Setter Property="Background" Value="#FFFFFFFF"/>
-            <Setter Property="Foreground" Value="#FF000000"/>
-            <Setter Property="FontFamily" Value="Consolas"/>
-            <Setter Property="FontSize" Value="11"/>
-        </Style>
-    </UserControl.Resources>
     <DockPanel LastChildFill="True">
         <DockPanel Margin="5 0 5 10" DockPanel.Dock="Bottom" LastChildFill="True">
-            <Button Name="SendButton" Content="Send" IsEnabled="False" Margin="5 0 5 0" Padding="10 0 10 0" DockPanel.Dock="Right" Click="Send_Click"/>
-            <TextBox Name="MessageToSend" IsEnabled="False" KeyUp="MessageToSend_KeyUp" Margin="5 0 5 0"/>
+            <Button Name="SendButton" Content="Send" IsEnabled="False" Margin="5 0 5 0" Padding="10 0 10 0" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}" DockPanel.Dock="Right" Click="Send_Click"/>
+            <TextBox Name="MessageToSend" IsEnabled="False" KeyUp="MessageToSend_KeyUp" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}" Margin="5 0 5 0"/>
         </DockPanel>
         <WrapPanel Orientation="Horizontal" Margin="5 0 5 0" DockPanel.Dock="Bottom">
-            <ComboBox Name="ComPorts" DropDownOpened="ComPorts_DropDownOpened" Style="{StaticResource ControlComboBox}"/>
-            <Button Name="ConnectButton" Content="Connect" Click="Connect_Click" Style="{StaticResource ControlButton}"/>
-            <Button Name="DisconnectButton" Content="Disconnect" Visibility="Collapsed" Click="Disconnect_Click" Style="{StaticResource ControlButton}"/>
-            <Button Name="ReconnectButton" Content="Reconnect" Visibility="Collapsed" Click="Reconnect_Click" Style="{StaticResource ControlButton}"/>
-            <Button Content="Clear" Click="Clear_Click" Style="{StaticResource ControlButton}"/>
-            <Button Name="SettingsOutputControl" Content="Show Settings" Click="SettingsOutputControl_Click" Style="{StaticResource ControlButton}"/>
-            <ToggleButton Name="AutoscrollCheck" IsChecked="True">
-                <ToggleButton.Style>
-                    <Style BasedOn="{StaticResource ControlToggleButton}" TargetType="{x:Type ToggleButton}">
-                        <Setter Property="Content" Value="Disable Auto Scroll"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsChecked" Value="False">
-                                <Setter Property="Content" Value="Enable Auto Scroll"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ToggleButton.Style>
-            </ToggleButton>
+            <ComboBox Name="ComPorts" DropDownOpened="ComPorts_DropDownOpened" Margin="5 0 5 10" MinWidth="70" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
+            <Button Name="ConnectButton" Content="Connect" Click="Connect_Click" Margin="5 0 5 10" Padding="10 0 10 0" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"/>
+            <Button Name="DisconnectButton" Content="Disconnect" Visibility="Collapsed" Click="Disconnect_Click" Margin="5 0 5 10" Padding="10 0 10 0" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"/>
+            <Button Name="ReconnectButton" Content="Reconnect" Visibility="Collapsed" Click="Reconnect_Click" Margin="5 0 5 10" Padding="10 0 10 0" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"/>
+            <Button Content="Clear" Click="Clear_Click" Margin="5 0 5 10" Padding="10 0 10 0" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"/>
+            <Button Name="SettingsOutputControl" Content="Show Settings" Click="SettingsOutputControl_Click" Margin="5 0 5 10" Padding="10 0 10 0" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"/>
+            <Button Name="AutoScrollToggle" Content="Disable Auto Scroll" Margin="5 0 5 10" Padding="10 0 10 0" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}" Click="AutoScrollToggle_Click"/>
         </WrapPanel>
         <local:SerialMonitorSettingsControl x:Name="Settings" Visibility="Collapsed" Margin="10 10 10 10"/>
-        <FlowDocumentScrollViewer Name="Output" Style="{StaticResource OutputFlowDocumentScrollViewer}" Margin="0 0 0 10" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
-            <FlowDocument Style="{StaticResource OutputFlowDocument}"/>
+        <FlowDocumentScrollViewer Name="Output" Margin="0 0 0 10" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <FlowDocument FontFamily="Consolas" FontSize="11"/>
         </FlowDocumentScrollViewer>
     </DockPanel>
 </UserControl>
