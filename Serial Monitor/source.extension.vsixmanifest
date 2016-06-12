@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="Serial_Monitor.89c666b5-b0e1-4d78-989c-788a5c1fac7a" Version="1.1" Language="en-US" Publisher="Egor Grushko" />
+        <Identity Id="Serial_Monitor.89c666b5-b0e1-4d78-989c-788a5c1fac7a" Version="1.2" Language="en-US" Publisher="Egor Grushko" />
         <DisplayName>Serial Monitor</DisplayName>
         <Description xml:space="preserve">Serial Port Monitor for Visual Studio</Description>
         <MoreInfo>https://github.com/egorgrushko/SerialMonitor</MoreInfo>
