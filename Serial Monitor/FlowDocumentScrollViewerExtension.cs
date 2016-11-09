@@ -15,7 +15,7 @@ namespace Serial_Monitor
 
         public static void AppendText(this FlowDocumentScrollViewer flowDocumentScrollViewer, string data)
         {
-            flowDocumentScrollViewer.Document.ContentEnd.InsertTextInRun(data.Replace(Environment.NewLine, "\r"));
+            AppendText(flowDocumentScrollViewer, data, flowDocumentScrollViewer.FindResource(Microsoft.VisualStudio.PlatformUI.CommonControlsColors.TextBoxTextBrushKey) as SolidColorBrush);
         }
 
         public static void AppendText(this FlowDocumentScrollViewer flowDocumentScrollViewer, string data, SolidColorBrush brush)
