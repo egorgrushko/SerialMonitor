@@ -28,7 +28,7 @@ namespace Serial_Monitor
 
         private void PrintColorMessage(string message, SolidColorBrush brush)
         {
-            Output.AppendText(message, brush);
+            Output.AppendText(message + Environment.NewLine, brush);
 
             if (autoScrollEnabled == true)
             {
