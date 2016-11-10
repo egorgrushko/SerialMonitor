@@ -28,7 +28,7 @@ namespace Serial_Monitor
 
         private void PrintColorMessage(string message, SolidColorBrush brush)
         {
-            Output.AppendText(message + Environment.NewLine, brush);
+            Output.AppendText(message + Environment.NewLine, brush, Settings.OutputFontSize);
 
             if (autoScrollEnabled == true)
             {
@@ -78,7 +78,7 @@ namespace Serial_Monitor
                     port.Read(buffer, 0, bytesToRead);
 
                     string data = Settings.Encoding.GetString(buffer);
-                    Output.AppendText(data.Replace(Settings.ReceiveNewLine, "\r"));
+                    Output.AppendText(data.Replace(Settings.ReceiveNewLine, "\r"), Settings.OutputFontSize);
 
                     if (autoScrollEnabled == true)
                     {

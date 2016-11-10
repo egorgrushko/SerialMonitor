@@ -35,6 +35,10 @@
             <ComboBox Name="EncodingComboBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
         </StackPanel>
         <StackPanel Style="{StaticResource SettingsStackPanel}">
+            <Label Content="Output Font Size:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <ComboBox Name="OutputFontSizeComboBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
+        </StackPanel>
+        <StackPanel Style="{StaticResource SettingsStackPanel}">
             <Label Content="Handshake:" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
             <ComboBox Name="HandshakeComboBox" MinWidth="100" MaxWidth="100" Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"/>
         </StackPanel>

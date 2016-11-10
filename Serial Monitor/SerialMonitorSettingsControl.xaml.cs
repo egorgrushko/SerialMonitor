@@ -203,6 +203,28 @@ namespace Serial_Monitor
                 return defaultEncoding.CodePage + " " + defaultEncoding.WebName + " - " + defaultEncoding.EncodingName;
             }
         }
+
+        public string[] OutputFontSizeValues
+        {
+            get
+            {
+                List<string> values = new List<string>();
+
+                for (int i = 6; i <= 72; i++)
+                {
+                    values.Add(i.ToString());
+                }
+
+                return values.ToArray();
+            }
+        }
+        public string DefaultOutputFontSize
+        {
+            get
+            {
+                return "11";
+            }
+        }
         #endregion
 
         #region Settings
@@ -301,6 +323,14 @@ namespace Serial_Monitor
             }
         }
 
+        public int OutputFontSize
+        {
+            get
+            {
+                return Convert.ToInt32(OutputFontSizeComboBox.Text);
+            }
+        }
+
         public bool DtrEnable
         {
             get;
@@ -369,6 +399,12 @@ namespace Serial_Monitor
                 EncodingComboBox.Items.Add(encoding);
             }
             EncodingComboBox.SelectedItem = DefaultEncoding;
+
+            foreach (string fontSize in OutputFontSizeValues)
+            {
+                OutputFontSizeComboBox.Items.Add(fontSize);
+            }
+            OutputFontSizeComboBox.SelectedItem = DefaultOutputFontSize;
 
             foreach (string handshakeValue in HandshakeMap.Keys)
             {
