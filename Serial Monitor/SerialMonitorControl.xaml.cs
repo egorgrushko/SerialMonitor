@@ -14,21 +14,14 @@ namespace Serial_Monitor
     {
         private SerialPort port;
 
-        private void ConfigurePort()
-        {
-            port.PortName = ComPorts.SelectedItem.ToString();
-            port.BaudRate = Settings.BaudRate;
-            port.DataBits = Settings.DataBits;
-            port.Handshake = Settings.Handshake;
-            port.Parity = Settings.Parity;
-            port.StopBits = Settings.StopBits;
-            port.ReadTimeout = Settings.ReadTimeout;
-            port.WriteTimeout = Settings.WriteTimeout;
-        }
-
         private void PrintColorMessage(string message, SolidColorBrush brush)
         {
-            Output.AppendText(message + Environment.NewLine, brush, Settings.OutputFontSize);
+
+          Dispatcher.Invoke(
+            () => {
+              var fontSize = Settings.OutputFontSize;
+              Output.AppendText(message + Environment.NewLine, brush, fontSize);
+            });
 
             if (autoScrollEnabled == true)
             {
@@ -58,7 +51,7 @@ namespace Serial_Monitor
 
         private void PrintSuccessMessage(string message)
         {
-            PrintColorMessage(message, Brushes.Green);
+            PrintColorMessage(message, Brushes.LightGreen);
         }
 
         private void PrintProcessMessage(string message)
@@ -66,43 +59,142 @@ namespace Serial_Monitor
             PrintColorMessage(message, Brushes.Aqua);
         }
 
-        private void SerialUpdate(object e, EventArgs s)
-        {
-            try
+        private void DataReceived(object sender, SerialDataReceivedEventArgs e) {
+
+          try
+          {
+            var p = sender as SerialPort;
+            int bytesToRead = p.BytesToRead;
+
+            if (bytesToRead > 0)
             {
-                int bytesToRead = port.BytesToRead;
+              byte[] buffer = new byte[bytesToRead];
+              p.Read(buffer, 0, bytesToRead);
 
-                if (bytesToRead > 0)
-                {
-                    byte[] buffer = new byte[bytesToRead];
-                    port.Read(buffer, 0, bytesToRead);
 
-                    string data = Settings.Encoding.GetString(buffer);
-                    Output.AppendText(data.Replace(Settings.ReceiveNewLine, "\r"), Settings.OutputFontSize);
 
-                    if (autoScrollEnabled == true)
+              Dispatcher.Invoke(
+                () => {
+                  string data = Settings.Encoding.GetString(buffer);
+                  var fontSize = Settings.OutputFontSize;
+                  var newLine = Settings.ReceiveNewLine;
+                  Output.AppendText(data.Replace(newLine, "\r"), fontSize);
+
+                  if (autoScrollEnabled == true)
+                  {
+                    Output.ScrollToEnd();
+                  }
+
+                  if (Settings.OutputToFileEnabled)
+                  {
+                    string file = Settings.RecordFile;
+
+                    if (!string.IsNullOrEmpty(file) && File.Exists(file))
                     {
-                        Output.ScrollToEnd();
+                      File.AppendAllText(file, data.Replace(Settings.ReceiveNewLine, Environment.NewLine));
                     }
-
-                    if (Settings.OutputToFileEnabled)
-                    {
-                        string file = Settings.RecordFile;
-
-                        if (!string.IsNullOrEmpty(file) && File.Exists(file))
-                        {
-                            File.AppendAllText(file, data.Replace(Settings.ReceiveNewLine, Environment.NewLine));
-                        }
-                    }
+                  }
                 }
+                );
+
+
+            } else {
+              var data = p.ReadExisting();
+
+
+              Dispatcher.Invoke(
+                () => {
+                  var fontSize = Settings.OutputFontSize;
+                  var newLine = Settings.ReceiveNewLine;
+
+                  Output.AppendText(data.Replace(newLine, "\r"), fontSize);
+
+                  if (autoScrollEnabled == true)
+                  {
+                    Output.ScrollToEnd();
+                  }
+
+                  if (Settings.OutputToFileEnabled)
+                  {
+                    string file = Settings.RecordFile;
+
+                    if (!string.IsNullOrEmpty(file) && File.Exists(file))
+                    {
+                      File.AppendAllText(file, data.Replace(Settings.ReceiveNewLine, Environment.NewLine));
+                    }
+                  }
+                }
+                );
+
+
             }
-            catch (Exception ex)
+          }
+          catch (Exception ex)
+          {
+            PrintErrorMessage(Environment.NewLine + ex.Message);
+          }
+        }
+        private void ErrorReceived(object sender, SerialErrorReceivedEventArgs e) {
+          try
+          {
+            var p = sender as SerialPort;
+            int bytesToRead = port.BytesToRead;
+
+            if (bytesToRead > 0)
             {
-                PrintErrorMessage(Environment.NewLine + ex.Message);
+              byte[] buffer = new byte[bytesToRead];
+              p.Read(buffer, 0, bytesToRead);
+
+              Dispatcher.Invoke(
+                () => {
+                  string data = Settings.Encoding.GetString(buffer);
+
+                  PrintErrorMessage(data);
+
+                  if (autoScrollEnabled == true) {
+                    Output.ScrollToEnd();
+                  }
+
+                  if (Settings.OutputToFileEnabled) {
+                    string file = Settings.RecordFile;
+
+                    if (!string.IsNullOrEmpty(file) && File.Exists(file)) {
+                      File.AppendAllText(file,
+                        data.Replace(Settings.ReceiveNewLine, Environment.NewLine)
+                        );
+                    }
+                  }
+                });
+            } else {
+              var data = p.ReadExisting();
+              PrintErrorMessage(data);
+
+              Dispatcher.Invoke(
+                () => {
+                  if (autoScrollEnabled == true) {
+                    Output.ScrollToEnd();
+                  }
+
+                  if (Settings.OutputToFileEnabled) {
+                    string file = Settings.RecordFile;
+
+                    if (!string.IsNullOrEmpty(file) && File.Exists(file)) {
+                      File.AppendAllText(file,
+                        data.Replace(Settings.ReceiveNewLine, Environment.NewLine)
+                        );
+                    }
+                  }
+                });
             }
+
+          }
+          catch (Exception ex)
+          {
+            PrintErrorMessage(Environment.NewLine + ex.Message);
+          }
         }
 
-        private DispatcherTimer portHandlerTimer;
+
         private bool autoScrollEnabled = true;
 
         public SerialMonitorControl()
@@ -110,16 +202,16 @@ namespace Serial_Monitor
             this.InitializeComponent();
             Dispatcher.ShutdownStarted += Dispatcher_ShutdownStarted;
 
-            port = new SerialPort();
 
-            portHandlerTimer = new DispatcherTimer(DispatcherPriority.ApplicationIdle, Application.Current.Dispatcher);
-            portHandlerTimer.Tick += SerialUpdate;
+            //portHandlerTimer = new DispatcherTimer(DispatcherPriority.ApplicationIdle, Application.Current.Dispatcher);
+            //portHandlerTimer.Tick += SerialUpdate;
         }
+
+
 
         private void Dispatcher_ShutdownStarted(object sender, EventArgs e)
         {
-            portHandlerTimer.Stop();
-            port.Dispose();
+          port?.Dispose();
         }
 
         private void SettingsOutputControl_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -149,10 +241,25 @@ namespace Serial_Monitor
                 try
                 {
                     PrintProcessMessage("Configuring port...");
-                    ConfigurePort();
+                    port = new SerialPort(
+                      ComPorts.SelectedItem.ToString(),
+                      Settings.BaudRate,
+                      Settings.Parity,
+                      Settings.DataBits,
+                      Settings.StopBits);
 
-                    PrintProcessMessage("Connecting...");
+                    port.DataReceived += DataReceived;
+                    port.ErrorReceived += ErrorReceived;
+
+          port.Handshake = Settings.Handshake;
+          port.ReadTimeout = Settings.ReadTimeout;
+          port.WriteTimeout = Settings.WriteTimeout;
+
+          PrintProcessMessage("Connecting...");
+
+
                     port.Open();
+
 
                     if (Settings.DtrEnable == true)
                     {
@@ -173,7 +280,7 @@ namespace Serial_Monitor
                     Settings.IsEnabled = false;
 
                     PrintSuccessMessage("Connected!");
-                    portHandlerTimer.Start();
+
                 }
                 catch (Exception ex)
                 {
@@ -192,9 +299,8 @@ namespace Serial_Monitor
             {
                 PrintProcessMessage(Environment.NewLine + "Closing port...");
 
-                portHandlerTimer.Stop();
 
-                port.Close();
+                port?.Close();
 
                 ConnectButton.Visibility = Visibility.Visible;
                 DisconnectButton.Visibility = Visibility.Collapsed;
@@ -206,7 +312,7 @@ namespace Serial_Monitor
 
                 Settings.IsEnabled = true;
 
-                PrintSuccessMessage("Port closed!");
+                PrintSuccessMessage("Port closed!" + Environment.NewLine + Environment.NewLine);
             }
             catch (Exception ex)
             {
@@ -229,12 +335,15 @@ namespace Serial_Monitor
         {
             try
             {
-                byte[] data = Encoding.Convert(
-                    Encoding.Default,
-                    Settings.Encoding,
-                    Encoding.Default.GetBytes(MessageToSend.Text + Settings.SendNewLine));
+              PrintProcessMessage(MessageToSend.Text);
+                //byte[] data = Encoding.Convert(
+                //    Encoding.Default,
+                //    Settings.Encoding,
+                //    Encoding.Default.GetBytes(MessageToSend.Text + Settings.SendNewLine));
 
-                port.Write(data, 0, data.Length);
+                //port.Write(data, 0, data.Length);
+                port.Write(MessageToSend.Text + "\r");
+                MessageToSend.Text = string.Empty;
             }
             catch (Exception ex)
             {
