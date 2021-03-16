@@ -23,7 +23,6 @@ namespace Serial_Monitor
             TextRange range = new TextRange(flowDocumentScrollViewer.Document.ContentEnd.DocumentEnd, flowDocumentScrollViewer.Document.ContentEnd.DocumentEnd);
             range.Text = data.Replace(Environment.NewLine, "\r");
             range.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
-            range.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Oblique);
             range.ApplyPropertyValue(TextElement.FontSizeProperty, (double)fontSize);
         }
 
